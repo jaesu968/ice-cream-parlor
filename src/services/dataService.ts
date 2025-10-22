@@ -43,6 +43,9 @@ export const fetchIceCreamFlavors = async (): Promise<DataResult> => {
  */
 const fetchFromNetwork = async (): Promise<DataResult> => {
   // Use fetchWithRetry for robust network requests
+  const response = await fetchWithRetry(API_URL, 3); 
+  // convert the network response to JSON format
+  const apiData = await response.json();
 
   
   if (!apiData.data || !apiData.data.flavors || !Array.isArray(apiData.data.flavors)) {
@@ -85,7 +88,24 @@ const fetchAndUpdateCache = async (): Promise<void> => {
  * Loads data from cache only (no network request)
  */
 export const loadFromCache = async (): Promise<DataResult> => {
-
+  // retrieve cached data
+  // put in variable named cachedData
+  // returns data of type IceCreamFlavor[] or null if no cache exists
+  const cachedData = await getCache<IceCreamFlavor[]>(CACHE_KEY);
+  // get the timestamp from AsyncStorage
+  // and place it in a constant variable named cachedTimestamp
+  const cachedTimestamp = await AsyncStorage.getItem(TIMESTAMP_KEY); 
+  // check if data exists and contains ice cream flavors
+  if (!cachedData || cachedData.length === 0) {
+    throw new Error("No cached data found"); 
+  }
+  return {
+      data: cachedData, 
+      source: 'cache',
+      // set to cached timestamp converted to a Data object first, then a locale string
+      // or null if no timestamp exists
+      timestamp: cachedTimestamp ? new Date(cachedTimestamp).toLocaleString() : null
+  };
 };
 
 /**

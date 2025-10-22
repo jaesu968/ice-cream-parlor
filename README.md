@@ -46,11 +46,32 @@ An ice cream flavors mobile application demonstrating robust React Native data m
 - Last fetch timestamp tracking
 - Button grid for: Fetch, Load from Storage, Clear Display, Clear Storage
 - Interactive FlatList with ice cream flavor cards
+- Dismissible toast notifications for user feedback
 
 ### 📋 Type Safety
 **File:** `src/types/IceCreamFlavor.ts`
 - TypeScript interface ensuring data consistency
 - Properties: id, name, description, price, category, image, rating, availability
+
+## 🛡️ Stability & Reliability Features
+
+### Robust Error Handling
+- **Automatic Retry Logic:** Failed network requests automatically retry up to 3 times with exponential backoff
+- **Graceful Degradation:** When network fails, app seamlessly falls back to cached data
+- **HTTP Status Handling:** Client errors (4xx) fail fast without retries; server errors (5xx) trigger intelligent retries
+- **User-Friendly Messages:** All errors display clear, actionable messages
+
+### Data Integrity
+- **Automatic Data Cleaning:** Emojis and special characters stripped from flavor names for consistency
+- **Type Validation:** Strict TypeScript types prevent runtime errors
+- **Cache Expiration:** Automatic cleanup of stale data with configurable TTL (default 30 minutes)
+- **Timestamp Tracking:** All cached data includes fetch timestamps for transparency
+
+### Performance Optimization
+- **Offline-First Pattern:** Instant data display from cache while fetching fresh data in background
+- **Fire-and-Forget Updates:** Background cache refreshes don't block the UI
+- **Namespaced Storage Keys:** Organized AsyncStorage prevents data collisions
+- **Efficient Cache Management:** Bulk cache clearing with prefix-based filtering
 
 ## Project Structure
 
@@ -108,11 +129,20 @@ npm run web        # Run on web
 ```
 
 ## Key Technologies
-- **React Native** 0.82.1
-- **React** 19.2.0
-- **Expo** 54.0.18
-- **AsyncStorage** 2.2.0 (Local persistence)
-- **TypeScript** 5.9.3
+
+| Technology | Version | Purpose |
+|-----------|---------|---------|
+| **React Native** | 0.82.1 | Cross-platform mobile framework |
+| **React** | 19.2.0 | UI library and hooks (useIceCreamData) |
+| **Expo** | 54.0.18 | Build and deployment platform |
+| **TypeScript** | 5.9.3 | Static type checking and code safety |
+| **AsyncStorage** | 2.2.0 | Local device persistence & caching |
+
+### Key Libraries Used
+- **Custom Hooks:** useIceCreamData for centralized state management
+- **Network Utilities:** fetchWithRetry for resilient API calls
+- **Cache Utilities:** createCache/getCache with automatic expiration
+- **Storage Keys:** Centralized key management with namespacing
 
 ## Notes
 - Sometimes updates can get stuck during the rendering process. If you're not seeing your latest changes, try refreshing the page.

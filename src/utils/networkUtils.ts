@@ -1,5 +1,3 @@
-import { get } from "mongoose";
-
 export const fetchWithRetry = async (url: string, retries = 3): Promise<Response> => {
   
   // add a loop here
